@@ -1,0 +1,21 @@
+{
+  "name": "streetside",
+  "private": true,
+  "version": "1.0.0",
+  "description": "StreetSide — street food vendor discovery platform (root orchestrator for frontend + backend)",
+  "scripts": {
+    "install:all": "npm install && npm install --prefix frontend && npm install --prefix backend",
+    "dev": "concurrently -n frontend,backend -c blue,green \"npm run dev --prefix frontend\" \"npm run dev --prefix backend\"",
+    "dev:frontend": "npm run dev --prefix frontend",
+    "dev:backend": "npm run dev --prefix backend",
+    "build": "npm run build --prefix frontend && npm run build --prefix backend",
+    "build:frontend": "npm run build --prefix frontend",
+    "build:backend": "npm run build --prefix backend",
+    "seed": "npm run seed --prefix backend",
+    "test": "npm run test --prefix backend",
+    "lint": "npm run lint --prefix frontend && npm run lint --prefix backend"
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.0"
+  }
+}
