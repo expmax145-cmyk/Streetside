@@ -40,6 +40,10 @@ export function createApp(): Express {
     'http://localhost:5173',
     'http://127.0.0.1:5173',
   ]);
+  // On Vercel the site and API share one domain; allow it without extra config.
+  if (process.env.VERCEL_PROJECT_PRODUCTION_URL) {
+    allowedOrigins.add(`https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`);
+  }
 
   app.use(
     cors({

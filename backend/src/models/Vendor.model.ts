@@ -138,7 +138,7 @@ const vendorSchema = new Schema<IVendor>(
     // which forces this regardless of what the client sends.
     approvalStatus: { type: String, enum: ['pending', 'approved', 'rejected'], default: 'pending' },
     rejectionReason: { type: String, trim: true, maxlength: 300 },
-    // fssaiLicenseNumber: { type: String, trim: true, maxlength: 30 },
+    fssaiLicenseNumber: { type: String, trim: true, maxlength: 30 },
     hygieneRating: { type: Number, min: 1, max: 5 },
     hygieneVerified: { type: Boolean, default: false },
   },

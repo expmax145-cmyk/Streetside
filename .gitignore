@@ -1,4 +1,3 @@
-
 # Dependencies
 node_modules/
 **/node_modules/
@@ -7,15 +6,12 @@ node_modules/
 dist/
 **/dist/
 build/
-**/build/
 
 # Environment files — never commit real secrets
 .env
 **/.env
-.env.*
-**/.env.*
-!.env.example
-!**/.env.example
+.env.local
+.env.*.local
 
 # Test coverage
 coverage/
@@ -24,24 +20,13 @@ coverage/
 # OS artifacts
 .DS_Store
 Thumbs.db
-desktop.ini
 
 # Logs
 *.log
 npm-debug.log*
-yarn-debug.log*
-pnpm-debug.log*
 
-# Editor and IDE
+# Editor
 .vscode/
 .idea/
 *.swp
 *.swo
-
-# Temporary files
-*.tmp
-*.temp
-*.bak
-
-# Local development files
-.vercel/

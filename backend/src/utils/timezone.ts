@@ -56,8 +56,12 @@ export function endOfDayInTimezone(d: Date, tz: string = APP_TIMEZONE): Date {
   const tzFormatter = new Intl.DateTimeFormat('en-US', {
     timeZone: tz, timeZoneName: 'shortOffset',
   });
-  const offsetStr = tzFormatter.format(d).match(/GMT([+-]\d+(?::\d+)?)/)?.[1] ?? '+00:00';
-  const normalized = offsetStr.includes(':') ? offsetStr : `${offsetStr}:00`;
+  // shortOffset yields e.g. "GMT+5:30" / "GMT-5" / "GMT"; ISO-8601 needs a
+  // zero-padded "+05:30", otherwise `new Date(...)` is an Invalid Date.
+  const offsetMatch = tzFormatter.format(d).match(/GMT([+-])(\d{1,2})(?::(\d{2}))?/);
+  const normalized = offsetMatch
+    ? `${offsetMatch[1]}${offsetMatch[2].padStart(2, '0')}:${offsetMatch[3] ?? '00'}`
+    : '+00:00';
 
   return new Date(`${dateStr}${normalized}`);
 }

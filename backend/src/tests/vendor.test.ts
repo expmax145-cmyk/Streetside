@@ -65,7 +65,7 @@ describe('Vendor routes', () => {
       .post('/api/vendors')
       .set('Authorization', `Bearer ${token}`)
       .send({
-        name: 'Brand New Cart', cuisine: 'Chaat', categories: ['Chaat'], description: 'Just registered',
+        name: 'Brand New Cart', cuisine: 'Street Food', categories: ['Chaat'], description: 'Just registered',
         image: 'https://example.com/img.jpg', location: { address: 'A', area: 'B', lat: 16.5, lng: 80.6 },
         hours: { open: '10:00', close: '20:00', days: 'Mon - Sun' }, phone: '9998887776', veg: 'both',
       })
@@ -118,7 +118,7 @@ describe('Vendor routes', () => {
       .post('/api/vendors')
       .set('Authorization', `Bearer ${ownerToken}`)
       .send({
-        name: 'Sketchy Cart', cuisine: 'Chaat', categories: ['Chaat'], description: 'Needs review',
+        name: 'Sketchy Cart', cuisine: 'Street Food', categories: ['Chaat'], description: 'Needs review',
         image: 'https://example.com/img.jpg', location: { address: 'A', area: 'B', lat: 16.5, lng: 80.6 },
         hours: { open: '10:00', close: '20:00', days: 'Mon - Sun' }, phone: '9998887775', veg: 'both',
       })

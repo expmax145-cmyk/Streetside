@@ -43,7 +43,8 @@ describe('Auth routes', () => {
     expect(res.body.data.accessToken).toBeUndefined();
     expect(res.body.data.user.email).toBe('test@example.com');
     expect(res.body.data.user.name).toBe('Test User');
-    expect(res.body.data.user.emailVerified).toBe(false); // expect(extractCookie(res, ACCESS)).toBeTruthy();
+    expect(res.body.data.user.emailVerified).toBe(false);
+    expect(extractCookie(res, ACCESS)).toBeTruthy();
     expect(extractCookie(res, REFRESH)).toBeTruthy();
     expect(extractCookie(res, CSRF)).toBeTruthy();
   });
