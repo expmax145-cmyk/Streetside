@@ -28,7 +28,7 @@ const listQueryValidation = [
 
 router.get('/', listQueryValidation, validate, attachUserIfPresent, listVendorsHandler);
 
-router.get('/:id', param('id').isMongoId().withMessage('Invalid vendor id'), validate, attachUserIfPresent, getVendorHandler);
+router.get('/:id', param('id').isUUID().withMessage('Invalid vendor id'), validate, attachUserIfPresent, getVendorHandler);
 
 // Optional secondary-contact/online-presence fields, shared by both the
 // create and update validation chains — same rules either way since
@@ -91,7 +91,7 @@ router.put(
   '/:id',
   authenticate,
   authorize('vendor', 'admin'),
-  param('id').isMongoId(),
+  param('id').isUUID(),
   vendorUpdateValidation,
   validate,
   updateVendorHandler,
@@ -101,7 +101,7 @@ router.delete(
   '/:id',
   authenticate,
   authorize('vendor', 'admin'),
-  param('id').isMongoId(),
+  param('id').isUUID(),
   validate,
   deleteVendorHandler,
 );

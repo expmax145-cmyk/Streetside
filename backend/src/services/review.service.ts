@@ -1,4 +1,4 @@
-import { Types } from 'mongoose';
+import { query } from '../db/engine';
 import { Review, type IReview } from '../models/Review.model';
 import { Vendor } from '../models/Vendor.model';
 import { ApiError } from '../utils/ApiError';
@@ -20,10 +20,11 @@ function stripOversizedAvatar(user: unknown): unknown {
 }
 
 export async function recomputeVendorRating(vendorId: string): Promise<void> {
-  const [agg] = await Review.aggregate([
-    { $match: { vendor: new Types.ObjectId(vendorId) } },
-    { $group: { _id: null, avgRating: { $avg: '$rating' }, count: { $sum: 1 } } },
-  ]);
+  const { rows } = await query(
+    'select avg(rating)::float8 as avg_rating, count(*)::int as count from streetside.reviews where vendor_id = $1::uuid',
+    [vendorId],
+  );
+  const agg = rows[0] && rows[0].count > 0 ? { avgRating: rows[0].avg_rating as number, count: rows[0].count as number } : null;
 
   const rating = agg ? Math.round(agg.avgRating * 10) / 10 : 0;
   const reviewCount = agg ? agg.count : 0;

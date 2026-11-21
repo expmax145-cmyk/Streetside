@@ -42,7 +42,7 @@ describe('Media', () => {
       .send({ dataUri: TINY_PNG_DATA_URI })
       .expect(201);
 
-    expect(uploadRes.body.data.url).toMatch(/^\/api\/media\/[a-f0-9]{24}$/);
+    expect(uploadRes.body.data.url).toMatch(/^\/api\/media\/[0-9a-f-]{36}$/);
     const mediaId = uploadRes.body.data.id;
 
     const stored = await Media.findById(mediaId);
@@ -56,7 +56,7 @@ describe('Media', () => {
   });
 
   it('returns 404 for a well-formed but nonexistent media id', async () => {
-    await request(app).get('/api/media/507f1f77bcf86cd799439011').expect(404);
+    await request(app).get('/api/media/00000000-0000-4000-8000-000000000000').expect(404);
   });
 
   it('rejects a malformed media id', async () => {

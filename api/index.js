@@ -1,5 +1,5 @@
 // Vercel serverless entry: runs the Express API (compiled to backend/dist
-// by the build step) and reuses one MongoDB connection across invocations.
+// by the build step) and reuses one Postgres (Supabase) connection pool across invocations.
 const { createApp } = require('../backend/dist/app');
 const { connectDB } = require('../backend/dist/config/db');
 

@@ -1,8 +1,6 @@
-import { Schema, model, type Document, type Types } from 'mongoose';
-import { toJSONPlugin } from './plugins/toJSON';
+import { defineModel, type BaseDoc } from '../db/model';
 
-export interface IEvent extends Document {
-  _id: Types.ObjectId;
+export interface IEvent extends BaseDoc {
   name: string;
   description: string;
   longDescription: string;
@@ -11,33 +9,25 @@ export interface IEvent extends Document {
   time: string;
   location: string;
   area: string;
-  vendors: Types.ObjectId[];
+  vendors: any[];
   featured: boolean;
-  createdBy?: Types.ObjectId;
-  createdAt: Date;
-  updatedAt: Date;
+  createdBy?: any;
 }
 
-const eventSchema = new Schema<IEvent>(
-  {
-    name: { type: String, required: true, trim: true, maxlength: 150 },
-    description: { type: String, required: true, maxlength: 300 },
-    longDescription: { type: String, default: '', maxlength: 2000 },
-    image: { type: String, required: true },
-    date: { type: Date, required: true },
-    time: { type: String, required: true },
-    location: { type: String, required: true },
-    area: { type: String, required: true },
-    vendors: [{ type: Schema.Types.ObjectId, ref: 'Vendor' }],
-    featured: { type: Boolean, default: false },
-    createdBy: { type: Schema.Types.ObjectId, ref: 'User' },
+export const Event = defineModel<IEvent>({
+  name: 'Event',
+  table: 'events',
+  fields: {
+    name: { type: 'string', required: true, trim: true, maxlength: 150 },
+    description: { type: 'string', required: true, maxlength: 300 },
+    longDescription: { type: 'string', default: '', maxlength: 2000 },
+    image: { type: 'string', required: true },
+    date: { type: 'date', required: true },
+    time: { type: 'string', required: true },
+    location: { type: 'string', required: true },
+    area: { type: 'string', required: true },
+    vendors: { type: 'ids', ref: 'Vendor' },
+    featured: { type: 'boolean', default: false },
+    createdBy: { type: 'id', column: 'created_by', ref: 'User' },
   },
-  { timestamps: true },
-);
-
-eventSchema.index({ date: 1 });
-eventSchema.index({ featured: 1 });
-
-eventSchema.plugin(toJSONPlugin);
-
-export const Event = model<IEvent>('Event', eventSchema);
+});

@@ -1,32 +1,20 @@
-import { Schema, model, type Document, type Types } from 'mongoose';
-import { toJSONPlugin } from './plugins/toJSON';
+import { defineModel, type BaseDoc } from '../db/model';
 
-export interface IReview extends Document {
-  _id: Types.ObjectId;
-  user: Types.ObjectId;
-  vendor: Types.ObjectId;
+export interface IReview extends BaseDoc {
+  user: any;
+  vendor: any;
   rating: number;
   comment: string;
-  createdAt: Date;
-  updatedAt: Date;
 }
 
-const reviewSchema = new Schema<IReview>(
-  {
-    user: { type: Schema.Types.ObjectId, ref: 'User', required: true, index: true },
-    vendor: { type: Schema.Types.ObjectId, ref: 'Vendor', required: true, index: true },
-    rating: { type: Number, required: true, min: 1, max: 5 },
-    comment: { type: String, required: true, trim: true, minlength: 1, maxlength: 1000 },
+// One review per (user, vendor): enforced by the reviews_user_vendor_key unique index.
+export const Review = defineModel<IReview>({
+  name: 'Review',
+  table: 'reviews',
+  fields: {
+    user: { type: 'id', column: 'user_id', ref: 'User', required: true },
+    vendor: { type: 'id', column: 'vendor_id', ref: 'Vendor', required: true },
+    rating: { type: 'number', required: true, min: 1, max: 5 },
+    comment: { type: 'string', required: true, trim: true, minlength: 1, maxlength: 1000 },
   },
-  { timestamps: true },
-);
-
-// Business rule: one review per user per vendor. A user editing their
-// opinion should PUT/PATCH their existing review, not create a second
-// one — this unique index makes that impossible to violate even if a
-// controller bug tried to insert a duplicate.
-reviewSchema.index({ user: 1, vendor: 1 }, { unique: true });
-
-reviewSchema.plugin(toJSONPlugin);
-
-export const Review = model<IReview>('Review', reviewSchema);
+});

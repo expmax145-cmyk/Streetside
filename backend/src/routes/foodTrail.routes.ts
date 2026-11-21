@@ -18,7 +18,7 @@ const stopsValidation = (opts: { optional?: boolean } = {}) => {
   return [
     wrap(body('stops').isArray({ min: 1 })).withMessage('A food trail needs at least one stop'),
     body('stops.*.order').if(body('stops').exists()).isInt({ min: 1 }),
-    body('stops.*.vendor').if(body('stops').exists()).isMongoId().withMessage('Each stop needs a valid vendor id'),
+    body('stops.*.vendor').if(body('stops').exists()).isUUID().withMessage('Each stop needs a valid vendor id'),
     body('stops.*.note').if(body('stops').exists()).optional().isString().trim().isLength({ max: 300 }),
   ];
 };
@@ -44,18 +44,18 @@ const foodTrailUpdateValidation = [
 ];
 
 router.get('/', listFoodTrailsHandler);
-router.get('/:id', param('id').isMongoId(), validate, getFoodTrailHandler);
+router.get('/:id', param('id').isUUID(), validate, getFoodTrailHandler);
 
 router.post('/', authenticate, authorize('admin'), foodTrailBodyValidation, validate, createFoodTrailHandler);
 router.put(
   '/:id',
   authenticate,
   authorize('admin'),
-  param('id').isMongoId(),
+  param('id').isUUID(),
   foodTrailUpdateValidation,
   validate,
   updateFoodTrailHandler,
 );
-router.delete('/:id', authenticate, authorize('admin'), param('id').isMongoId(), validate, deleteFoodTrailHandler);
+router.delete('/:id', authenticate, authorize('admin'), param('id').isUUID(), validate, deleteFoodTrailHandler);
 
 export default router;

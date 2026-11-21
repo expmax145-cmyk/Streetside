@@ -66,7 +66,7 @@ router.patch(
       .custom((value: string) =>
         /^https?:\/\/\S+$/i.test(value) ||
         /^data:image\/(png|jpe?g|webp|gif);base64,/i.test(value) ||
-        /^\/api\/media\/[a-f0-9]{24}$/i.test(value),
+        /^\/api\/media\/[0-9a-f-]{36}$/i.test(value),
       )
       .withMessage('Avatar must be a valid image URL or an uploaded image (PNG, JPEG, WebP, or GIF)'),
   ],

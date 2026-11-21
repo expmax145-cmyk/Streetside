@@ -37,7 +37,7 @@ export const vendorReviewsRouter = Router({ mergeParams: true });
 
 vendorReviewsRouter.get(
   '/',
-  param('vendorId').isMongoId(),
+  param('vendorId').isUUID(),
   query('page').optional().isInt({ min: 1 }),
   query('limit').optional().isInt({ min: 1, max: 50 }),
   validate,
@@ -47,7 +47,7 @@ vendorReviewsRouter.get(
 vendorReviewsRouter.post(
   '/',
   authenticate,
-  param('vendorId').isMongoId(),
+  param('vendorId').isUUID(),
   ratingValidation(),
   commentValidation(),
   validate,
@@ -66,13 +66,13 @@ reviewRouter.get('/mine', authenticate, listMyReviewsHandler);
 reviewRouter.put(
   '/:id',
   authenticate,
-  param('id').isMongoId(),
+  param('id').isUUID(),
   ratingValidation({ optional: true }),
   commentValidation({ optional: true }),
   validate,
   updateReviewHandler,
 );
 
-reviewRouter.delete('/:id', authenticate, param('id').isMongoId(), validate, deleteReviewHandler);
+reviewRouter.delete('/:id', authenticate, param('id').isUUID(), validate, deleteReviewHandler);
 
 export default reviewRouter;

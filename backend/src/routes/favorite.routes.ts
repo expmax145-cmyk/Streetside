@@ -12,8 +12,8 @@ router.use(authenticate);
 
 router.get('/', listFavoritesHandler);
 
-router.post('/:vendorId', param('vendorId').isMongoId(), validate, addFavoriteHandler);
+router.post('/:vendorId', param('vendorId').isUUID(), validate, addFavoriteHandler);
 
-router.delete('/:vendorId', param('vendorId').isMongoId(), validate, removeFavoriteHandler);
+router.delete('/:vendorId', param('vendorId').isUUID(), validate, removeFavoriteHandler);
 
 export default router;

@@ -1,5 +1,5 @@
 import type { NextFunction, Request, Response } from 'express';
-import mongoose from 'mongoose';
+import { CastError, ValidationError } from '../db/errors';
 import { ApiError } from '../utils/ApiError';
 import { isProduction } from '../config/env';
 
@@ -24,11 +24,11 @@ export function errorHandler(err: unknown, req: Request, res: Response, _next: N
     statusCode = err.statusCode;
     message = err.message;
     details = err.details;
-  } else if (err instanceof mongoose.Error.ValidationError) {
+  } else if (err instanceof ValidationError) {
     statusCode = 400;
     message = 'Validation failed';
     details = Object.values(err.errors).map((e) => e.message);
-  } else if (err instanceof mongoose.Error.CastError) {
+  } else if (err instanceof CastError) {
     statusCode = 400;
     message = `Invalid ${err.path}: ${err.value}`;
   } else if (isMongoDuplicateKeyError(err)) {

@@ -1,4 +1,4 @@
-import mongoose from 'mongoose';
+import { truncateAll } from '../db/engine';
 import { connectDB, disconnectDB } from '../config/db';
 import { env } from '../config/env';
 import { hashPassword, User } from '../models/User.model';
@@ -589,14 +589,12 @@ const TRAILS: TrailSeed[] = [
 ];
 
 async function clearAll() {
-  const database = mongoose.connection.db;
-  if (!database) throw new Error('MongoDB connection did not expose a database');
-  await database.dropDatabase();
+  await truncateAll();
 }
 
 async function seed() {
-  await connectDB(env.mongodbUri);
-  console.log('Clearing existing data (dropping database)...');
+  await connectDB(env.databaseUrl);
+  console.log('Clearing existing StreetSide data...');
   await clearAll();
 
   // --- Core accounts ------------------------------------------------------
@@ -612,7 +610,7 @@ async function seed() {
     role: 'admin',
   });
 
-  const vendorOwners = new Map<string, mongoose.Types.ObjectId>();
+  const vendorOwners = new Map<string, string>();
   for (let i = 0; i < VENDORS.length; i += 1) {
     const v = VENDORS[i];
     const email = `vendor${i + 1}@streetside.local`;
@@ -638,7 +636,7 @@ async function seed() {
   await awardPoints(String(bob._id), 'registered', 'Registered on StreetSide');
 
   // The 22 named reviewers from the curated review set, as real accounts.
-  const reviewerUsers = new Map<string, mongoose.Types.ObjectId>();
+  const reviewerUsers = new Map<string, string>();
   const uniqueReviewers = Array.from(new Set(CURATED_REVIEWS.map((r) => r.author)));
   for (const name of uniqueReviewers) {
     const review = CURATED_REVIEWS.find((r) => r.author === name)!;
@@ -654,7 +652,7 @@ async function seed() {
   }
 
   // A pool of generic customers for the supplementary/filler reviews.
-  const fillerUsers: mongoose.Types.ObjectId[] = [];
+  const fillerUsers: string[] = [];
   for (const [name, slug] of FILLER_CUSTOMERS) {
     const user = await User.create({
       name,
@@ -668,7 +666,7 @@ async function seed() {
 
   // --- Vendors + menu items -------------------------------------------------
   console.log('Seeding vendors and menu items...');
-  const vendorIds = new Map<string, mongoose.Types.ObjectId>();
+  const vendorIds = new Map<string, string>();
   for (const v of VENDORS) {
     const vendor = await Vendor.create({
       name: v.name,
@@ -712,8 +710,7 @@ async function seed() {
     const vendorId = vendorIds.get(r.vendorKey);
     const userId = reviewerUsers.get(r.author);
     if (!vendorId || !userId) continue;
-    const doc = new Review({ vendor: vendorId, user: userId, rating: r.rating, comment: r.comment });
-    await doc.save();
+    const doc = await Review.create({ vendor: vendorId, user: userId, rating: r.rating, comment: r.comment });
     await Review.updateOne({ _id: doc._id }, { createdAt: new Date(now() - r.daysAgo * DAY) });
   }
 
@@ -735,7 +732,7 @@ async function seed() {
       // reviewed this vendor (the schema enforces one review per user per
       // vendor, same as production).
       let attempts = 0;
-      let candidate: mongoose.Types.ObjectId | undefined;
+      let candidate: string | undefined;
       while (attempts < fillerUsers.length) {
         const c = fillerUsers[fillerCursor % fillerUsers.length];
         fillerCursor += 1;
@@ -755,8 +752,7 @@ async function seed() {
       const baseRating = Math.round(3.8 + (v.popularity / 100) * 1.2);
       const rating = Math.min(5, Math.max(3, baseRating + (i % 3 === 0 ? -1 : 0)));
 
-      const doc = new Review({ vendor: vendorId, user: candidate, rating, comment: template(specialty) });
-      await doc.save();
+      const doc = await Review.create({ vendor: vendorId, user: candidate, rating, comment: template(specialty) });
       await Review.updateOne({ _id: doc._id }, { createdAt: new Date(now() - (5 + i * 3) * DAY) });
     }
 

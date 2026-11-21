@@ -1,7 +1,7 @@
 import { createApp } from './app';
 import { connectDB } from './config/db';
 import { env } from './config/env';
-import mongoose from 'mongoose';
+import { disconnectDB } from './config/db';
 
 async function main() {
   await connectDB();
@@ -12,7 +12,7 @@ async function main() {
     console.log(`[server] StreetSide API listening on port ${env.port} (${env.nodeEnv})`);
   });
 
-  // Graceful shutdown — close HTTP server, then Mongo,
+  // Graceful shutdown — close HTTP server, then the database,
   // then force-exit after 10 s in case something hangs.
   const shutdown = (signal: string) => {
     console.log(`[server] ${signal} received, shutting down gracefully...`);
@@ -25,10 +25,10 @@ async function main() {
     server.close(async () => {
       console.log('[server] HTTP server closed');
       try {
-        await mongoose.disconnect();
-        console.log('[server] MongoDB disconnected');
+        await disconnectDB();
+        console.log('[server] Database disconnected');
       } catch (err) {
-        console.error('[server] Error disconnecting MongoDB:', err);
+        console.error('[server] Error disconnecting database:', err);
       }
       clearTimeout(forceExit);
       process.exit(0);

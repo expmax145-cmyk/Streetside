@@ -5,7 +5,7 @@ dotenv.config();
 interface EnvConfig {
   nodeEnv: 'development' | 'production' | 'test';
   port: number;
-  mongodbUri: string;
+  databaseUrl: string;
   jwtAccessSecret: string;
   jwtRefreshSecret: string;
   jwtAccessExpiresIn: string;
@@ -45,7 +45,9 @@ function required(name: string): string {
 export const env: EnvConfig = {
   nodeEnv: (process.env.NODE_ENV as EnvConfig['nodeEnv']) || 'development',
   port: Number(process.env.PORT) || 5001,
-  mongodbUri: required('MONGODB_URI'),
+  // Postgres connection string (Supabase pooler URL in production). Optional
+  // under test, where an in-memory Postgres is used.
+  databaseUrl: process.env.DATABASE_URL || '',
   jwtAccessSecret: required('JWT_ACCESS_SECRET'),
   jwtRefreshSecret: required('JWT_REFRESH_SECRET'),
   jwtAccessExpiresIn: process.env.JWT_ACCESS_EXPIRES_IN || '15m',

@@ -1,4 +1,3 @@
-import { type FilterQuery, Types } from 'mongoose';
 import { Vendor, type IVendor } from '../models/Vendor.model';
 import { User } from '../models/User.model';
 import { ApiError } from '../utils/ApiError';
@@ -102,7 +101,7 @@ export async function listVendors(query: VendorListQuery): Promise<PaginatedResu
   }
 
   // Deterministic default sort with _id tiebreaker
-  let cursor = Vendor.find(filter as FilterQuery<IVendor>)
+  let cursor = Vendor.find(filter)
     .populate('menu')
     .limit(IN_MEMORY_FILTER_CAP);
 

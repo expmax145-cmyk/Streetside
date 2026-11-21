@@ -1,36 +1,22 @@
-import { Schema, model, type Document, type Types } from 'mongoose';
-import { toJSONPlugin } from './plugins/toJSON';
+import { defineModel, type BaseDoc } from '../db/model';
 import { REPORT_TYPES, REPORT_STATUSES, type ReportType, type ReportStatus } from '../types/enums';
 
-export interface IReport extends Document {
-  _id: Types.ObjectId;
+export interface IReport extends BaseDoc {
   type: ReportType;
-  targetId: Types.ObjectId;
+  targetId: string;
   reason: string;
   status: ReportStatus;
-  reporter: Types.ObjectId;
-  createdAt: Date;
-  updatedAt: Date;
+  reporter: any;
 }
 
-const reportSchema = new Schema<IReport>(
-  {
-    type: { type: String, enum: REPORT_TYPES, required: true },
-    // Polymorphic reference (a review, vendor, or user id depending on
-    // `type`) — intentionally not a typed `ref` since it can point at
-    // three different collections; the admin controller resolves it
-    // based on `type` when it needs the full target document.
-    targetId: { type: Schema.Types.ObjectId, required: true },
-    reason: { type: String, required: true, maxlength: 500 },
-    status: { type: String, enum: REPORT_STATUSES, default: 'pending' },
-    reporter: { type: Schema.Types.ObjectId, ref: 'User', required: true },
+export const Report = defineModel<IReport>({
+  name: 'Report',
+  table: 'reports',
+  fields: {
+    type: { type: 'string', enum: REPORT_TYPES, required: true },
+    targetId: { type: 'id', required: true },
+    reason: { type: 'string', required: true, maxlength: 500 },
+    status: { type: 'string', enum: REPORT_STATUSES, default: 'pending' },
+    reporter: { type: 'id', column: 'reporter_id', ref: 'User', required: true },
   },
-  { timestamps: true },
-);
-
-reportSchema.index({ status: 1 });
-reportSchema.index({ type: 1, targetId: 1 });
-
-reportSchema.plugin(toJSONPlugin);
-
-export const Report = model<IReport>('Report', reportSchema);
+});

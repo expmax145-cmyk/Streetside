@@ -31,12 +31,12 @@ function menuItemValidation(opts: { optional?: boolean } = {}) {
 /** Mounted at /api/vendors/:vendorId/menu (see app.ts). */
 export const vendorMenuRouter = Router({ mergeParams: true });
 
-vendorMenuRouter.get('/', param('vendorId').isMongoId(), validate, listVendorMenuHandler);
+vendorMenuRouter.get('/', param('vendorId').isUUID(), validate, listVendorMenuHandler);
 
 vendorMenuRouter.post(
   '/',
   authenticate,
-  param('vendorId').isMongoId(),
+  param('vendorId').isUUID(),
   menuItemValidation(),
   validate,
   addMenuItemHandler,
@@ -48,12 +48,12 @@ const menuRouter = Router();
 menuRouter.put(
   '/:id',
   authenticate,
-  param('id').isMongoId(),
+  param('id').isUUID(),
   menuItemValidation({ optional: true }),
   validate,
   updateMenuItemHandler,
 );
 
-menuRouter.delete('/:id', authenticate, param('id').isMongoId(), validate, deleteMenuItemHandler);
+menuRouter.delete('/:id', authenticate, param('id').isUUID(), validate, deleteMenuItemHandler);
 
 export default menuRouter;

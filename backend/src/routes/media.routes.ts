@@ -17,6 +17,6 @@ router.post(
 );
 
 // Public read — image URLs are embedded in public vendor/menu pages
-router.get('/:id', param('id').isMongoId(), validate, getMediaHandler);
+router.get('/:id', param('id').isUUID(), validate, getMediaHandler);
 
 export default router;
