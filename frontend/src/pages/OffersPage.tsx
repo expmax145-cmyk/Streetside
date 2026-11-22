@@ -44,7 +44,7 @@ export function OffersPage() {
               <div className="absolute -bottom-8 -left-8 h-28 w-28 rounded-full bg-white/5" />
               <div className="relative">
                 <p className="mb-1 text-3xl font-extrabold">{offer.discount}</p>
-                <h3 className="mb-1 font-bold text-lg">{offer.title}</h3>
+                <h3 className="mb-1 text-lg font-bold text-white">{offer.title}</h3>
                 <p className="mb-4 text-sm text-white/85">{offer.description}</p>
                 <div className="mb-3 flex items-center gap-1.5 text-xs text-white/75">
                   <Clock size={12} /> Expires: {offer.expiry}

@@ -41,7 +41,7 @@ export function VendorCard({
       className="card card-hover group flex flex-col overflow-hidden animate-fade-in-up"
       style={{ animationDelay: `${Math.min(index * 60, 400)}ms` }}
     >
-      <div className="relative aspect-[4/3] overflow-hidden bg-charcoal-100">
+      <div className="relative aspect-[16/10] overflow-hidden sm:aspect-[4/3] bg-charcoal-100">
         <img src={imageOverride ?? vendor.image} alt={vendor.name} loading="lazy" className="img-cover transition-transform duration-500 group-hover:scale-[1.04]" />
         <div className="absolute inset-0 bg-gradient-to-t from-charcoal-900/75 via-charcoal-900/15 to-transparent" />
         <button
@@ -84,7 +84,7 @@ export function VendorCard({
 export function VendorCardSkeleton() {
   return (
     <div className="card overflow-hidden">
-      <div className="skeleton aspect-[4/3] w-full" />
+      <div className="skeleton aspect-[16/10] w-full sm:aspect-[4/3]" />
       <div className="space-y-3 p-4">
         <div className="skeleton h-4 w-3/4" />
         <div className="skeleton h-3 w-full" />

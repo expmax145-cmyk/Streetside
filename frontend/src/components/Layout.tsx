@@ -161,7 +161,7 @@ export function Layout({ children }: { children: ReactNode }) {
       <OfflineBanner />
       <EmailVerificationBanner />
 
-      <main className="relative mx-2 my-3 overflow-hidden rounded-2xl bg-cream-100 shadow-raised-3d md:mx-4 md:my-6 md:rounded-3xl">{children}</main>
+      <main className="relative mx-2 my-3 min-h-[calc(100dvh-10.5rem)] overflow-hidden rounded-2xl bg-cream-100 shadow-raised-3d md:mx-4 md:my-6 md:min-h-[calc(100dvh-12rem)] md:rounded-3xl lg:min-h-[calc(100dvh-9rem)]">{children}</main>
 
       <footer className="mt-20 hidden bg-surface-3d-deep text-cream-200 shadow-[inset_0_1px_0_rgba(255,224,194,0.08)] lg:block">
         <div className="container-app grid gap-10 py-14 md:grid-cols-4">

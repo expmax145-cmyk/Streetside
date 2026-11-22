@@ -241,14 +241,16 @@ export function VendorProfilePage() {
               {vendor.menu.map((item) => {
                 const VegIcon = vegIcon[item.veg];
                 return (
-                  <div key={item.id} className="card flex gap-4 p-4 transition-shadow hover:shadow-card-hover">
+                  <div key={item.id} className="card flex gap-3 p-3 transition-shadow hover:shadow-card-hover sm:gap-4 sm:p-4">
                     <img src={item.image} alt={item.name} loading="lazy" className="h-20 w-20 shrink-0 rounded-xl object-cover ring-1 ring-charcoal-100 sm:h-24 sm:w-24" />
                     <div className="min-w-0 flex-1">
                       <div className="flex items-start justify-between gap-2">
-                        <div className="flex items-center gap-2">
-                          <VegIcon size={16} className={vegColor[item.veg]} />
-                          <h3 className="font-bold text-charcoal-900">{item.name}</h3>
-                          {item.popular && <span className="badge bg-gold-100 text-gold-700"><Star size={10} fill="currentColor" /> Popular</span>}
+                        <div className="flex min-w-0 items-start gap-2">
+                          <VegIcon size={16} className={`mt-1 shrink-0 ${vegColor[item.veg]}`} />
+                          <div className="flex min-w-0 flex-wrap items-center gap-x-2 gap-y-1">
+                            <h3 className="font-bold leading-snug text-charcoal-900">{item.name}</h3>
+                            {item.popular && <span className="badge bg-gold-100 text-gold-700"><Star size={10} fill="currentColor" /> Popular</span>}
+                          </div>
                         </div>
                         <span className="shrink-0 font-extrabold text-charcoal-900">{formatPrice(item.price)}</span>
                       </div>

@@ -81,13 +81,13 @@ export function ExplorePage() {
         )}
         <CategoryPills active={activeCat} onSelect={handleCatSelect} />
         <div className="flex items-center justify-between gap-3">
-          <button onClick={() => setShowFilters(true)} className="btn-secondary">
+          <button onClick={() => setShowFilters(true)} className="btn-secondary shrink-0">
             <SlidersHorizontal size={16} /> Filters
             {(vegOnly || openOnly || (hasLocation && maxDistance < 10)) && <span className="flex h-5 w-5 items-center justify-center rounded-full bg-brand-600 text-xs text-white">{(vegOnly ? 1 : 0) + (openOnly ? 1 : 0) + (hasLocation && maxDistance < 10 ? 1 : 0)}</span>}
           </button>
-          <div className="flex items-center gap-2">
+          <div className="flex min-w-0 items-center gap-2">
             <span className="hidden text-sm text-charcoal-500 sm:inline">Sort by</span>
-            <select value={sortBy} onChange={(e) => handleSortChange(e.target.value as SortBy)} className="rounded-xl border border-charcoal-200 bg-white px-3 py-2 text-sm font-semibold text-charcoal-700 shadow-soft focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20">
+            <select value={sortBy} onChange={(e) => handleSortChange(e.target.value as SortBy)} className="min-w-0 max-w-full rounded-xl border border-charcoal-200 bg-white px-3 py-2 text-sm font-semibold text-charcoal-700 shadow-soft focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20">
               <option value="popularity">Popularity</option>
               <option value="rating">Rating</option>
               <option value="distance">Distance{!hasLocation ? ' (needs location)' : ''}</option>

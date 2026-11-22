@@ -1,6 +1,13 @@
 /** @type {import('tailwindcss').Config} */
 export default {
   content: ['./index.html', './src/**/*.{js,ts,jsx,tsx}'],
+  // Offer card colours are stored in the database as class strings (e.g.
+  // "from-brand-500 to-rose-500"), so Tailwind can't see them in the source.
+  // Without this the gradient is never generated and white text on the card
+  // becomes unreadable.
+  safelist: [
+    { pattern: /^(from|to)-(brand|rose|gold|teal|charcoal)-(400|500|600|700|900)$/ },
+  ],
   theme: {
     extend: {
       colors: {
