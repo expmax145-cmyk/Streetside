@@ -6,7 +6,6 @@ import { formatDistance, formatPriceRange, formatReviewCount, vendorIsOpenNow } 
 
 export function VendorCard({
   vendor,
-  index = 0,
   matchedMenuItem,
   imageOverride,
 }: {
@@ -39,7 +38,6 @@ export function VendorCard({
     <Link
       to={`/vendor/${vendor.id}`}
       className="card card-hover group flex flex-col overflow-hidden animate-fade-in-up"
-      style={{ animationDelay: `${Math.min(index * 60, 400)}ms` }}
     >
       <div className="relative aspect-[16/10] overflow-hidden sm:aspect-[4/3] bg-charcoal-100">
         <img src={imageOverride ?? vendor.image} alt={vendor.name} className="img-cover transition-transform duration-500 group-hover:scale-[1.04]" />

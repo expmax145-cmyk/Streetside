@@ -79,22 +79,19 @@ export function HomePage() {
             </p>
             <h1
               className="mb-5 text-4xl font-extrabold leading-[1.1] text-charcoal-900 md:text-6xl text-balance animate-fade-in-up"
-              style={{ animationDelay: '60ms' }}
             >
               Discover the best <span className="text-brand-600">street food</span> around you
             </h1>
             <p
               className="mb-8 max-w-lg text-base leading-relaxed text-charcoal-600 md:text-lg animate-fade-in-up"
-              style={{ animationDelay: '120ms' }}
             >
               Find hidden food gems, local vendors, and unforgettable flavors — curated for your city.
             </p>
-            <div className="max-w-xl animate-fade-in-up" style={{ animationDelay: '180ms' }}>
+            <div className="max-w-xl animate-fade-in-up">
               <SearchBar />
             </div>
             <div
               className="mt-7 flex flex-wrap items-center gap-x-5 gap-y-2 text-sm font-medium text-charcoal-600 animate-fade-in-up"
-              style={{ animationDelay: '240ms' }}
             >
               <span className="inline-flex items-center gap-1.5 rounded-full border border-brand-900/10 bg-gradient-to-b from-white to-cream-200 px-3 py-1.5 shadow-raised-3d">
                 <Utensils size={14} className="text-brand-600" /> {vendors.length}+ vendors
@@ -139,12 +136,11 @@ export function HomePage() {
           </Link>
         </div>
         <div className="no-scrollbar -mx-4 flex snap-x gap-3 overflow-x-auto px-4 pb-1 sm:mx-0 sm:px-0">
-          {categories.map((cat, i) => (
+          {categories.map((cat) => (
             <Link
               key={cat.id}
               to={`/explore?cat=${encodeURIComponent(cat.name)}`}
               className="group relative aspect-square w-32 shrink-0 snap-start overflow-hidden rounded-2xl border border-charcoal-200/60 shadow-card transition-all duration-300 hover:-translate-y-0.5 hover:shadow-card-hover animate-fade-in-up sm:w-36"
-              style={{ animationDelay: `${i * 50}ms` }}
             >
               <img src={cat.image} alt={cat.name} className="img-cover transition-transform duration-500 group-hover:scale-110" />
               <div className={`absolute inset-0 bg-gradient-to-t ${cat.color} opacity-50 mix-blend-multiply`} />
@@ -241,12 +237,11 @@ export function HomePage() {
             </Link>
           </div>
           <div className="grid gap-5 md:grid-cols-3">
-            {featuredTrails.map((trail, i) => (
+            {featuredTrails.map((trail) => (
               <Link
                 key={trail.id}
                 to={`/trails/${trail.id}`}
                 className="card card-hover group overflow-hidden animate-fade-in-up"
-                style={{ animationDelay: `${i * 80}ms` }}
               >
                 <div className="relative aspect-video overflow-hidden bg-charcoal-100">
                   <img
@@ -288,12 +283,11 @@ export function HomePage() {
           </Link>
         </div>
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {featuredOffers.map((offer, i) => (
+          {featuredOffers.map((offer) => (
             <Link
               key={offer.id}
               to={`/vendor/${offer.vendorId}`}
               className={`group relative overflow-hidden rounded-2xl bg-gradient-to-br ${offer.color} p-5 text-white shadow-card transition-all duration-300 hover:-translate-y-0.5 hover:shadow-card-hover animate-fade-in-up`}
-              style={{ animationDelay: `${i * 80}ms` }}
             >
               <div className="absolute -right-6 -top-6 h-24 w-24 rounded-full bg-white/10" />
               <div className="absolute -bottom-8 -left-8 h-28 w-28 rounded-full bg-white/5" />
@@ -320,10 +314,10 @@ export function HomePage() {
             <p className="section-subtitle">Real reviews from the StreetSide community</p>
           </div>
           <div className="grid gap-5 md:grid-cols-3">
-            {topReviews.map((review, i) => {
+            {topReviews.map((review) => {
               const vendor = vendors.find((v) => v.id === review.vendorId);
               return (
-                <div key={review.id} className="card p-5 animate-fade-in-up" style={{ animationDelay: `${i * 80}ms` }}>
+                <div key={review.id} className="card p-5 animate-fade-in-up">
                   <div className="mb-3 flex items-center gap-3">
                     <img src={review.avatar} alt="" className="h-10 w-10 rounded-full object-cover ring-2 ring-brand-100" />
                     <div>

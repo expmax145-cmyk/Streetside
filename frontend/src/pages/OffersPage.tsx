@@ -36,10 +36,10 @@ export function OffersPage() {
         </div>
       ) : (
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {offers.map((offer, i) => {
+        {offers.map((offer) => {
           const vendor = getVendorById(offer.vendorId);
           return (
-            <div key={offer.id} className={`relative overflow-hidden rounded-2xl bg-gradient-to-br ${offer.color} p-5 text-white shadow-card transition-transform duration-300 hover:-translate-y-0.5 hover:shadow-card-hover animate-fade-in-up`} style={{ animationDelay: `${i * 80}ms` }}>
+            <div key={offer.id} className={`relative overflow-hidden rounded-2xl bg-gradient-to-br ${offer.color} p-5 text-white shadow-card transition-transform duration-300 hover:-translate-y-0.5 hover:shadow-card-hover animate-fade-in-up`}>
               <div className="absolute -right-6 -top-6 h-24 w-24 rounded-full bg-white/10" />
               <div className="absolute -bottom-8 -left-8 h-28 w-28 rounded-full bg-white/5" />
               <div className="relative">

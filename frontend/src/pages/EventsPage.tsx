@@ -19,8 +19,8 @@ export function EventsPage() {
         <div className="mb-8">
           <h2 className="mb-4 text-lg font-bold text-charcoal-900 flex items-center gap-2"><Flame size={20} className="text-brand-600" /> Featured events</h2>
           <div className="grid gap-5 lg:grid-cols-2">
-            {featured.map((event, i) => (
-              <Link key={event.id} to={`/events/${event.id}`} className="card card-hover group overflow-hidden animate-fade-in-up" style={{ animationDelay: `${i * 100}ms` }}>
+            {featured.map((event) => (
+              <Link key={event.id} to={`/events/${event.id}`} className="card card-hover group overflow-hidden animate-fade-in-up">
                 <div className="relative aspect-[16/9] overflow-hidden bg-charcoal-100">
                   <img src={event.image} alt={event.name} className="img-cover transition-transform duration-500 group-hover:scale-[1.04]" />
                   <div className="absolute inset-0 bg-gradient-to-t from-charcoal-900/75 to-transparent" />
@@ -46,8 +46,8 @@ export function EventsPage() {
         <div>
           <h2 className="mb-4 text-lg font-bold text-charcoal-800">More events</h2>
           <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-            {upcoming.map((event, i) => (
-              <Link key={event.id} to={`/events/${event.id}`} className="card card-hover group overflow-hidden animate-fade-in-up" style={{ animationDelay: `${i * 80}ms` }}>
+            {upcoming.map((event) => (
+              <Link key={event.id} to={`/events/${event.id}`} className="card card-hover group overflow-hidden animate-fade-in-up">
                 <div className="relative aspect-video overflow-hidden">
                   <img src={event.image} alt={event.name} className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105" />
                   <div className="absolute inset-0 bg-gradient-to-t from-charcoal-900/60 to-transparent" />

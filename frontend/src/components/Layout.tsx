@@ -161,7 +161,7 @@ export function Layout({ children }: { children: ReactNode }) {
       <OfflineBanner />
       <EmailVerificationBanner />
 
-      <main className="relative mx-2 my-3 min-h-[calc(100dvh-10.5rem)] overflow-hidden rounded-2xl bg-cream-100 shadow-raised-3d md:mx-4 md:my-6 md:min-h-[calc(100dvh-12rem)] md:rounded-3xl lg:min-h-[calc(100dvh-9rem)]">{children}</main>
+      <main className="relative mx-2 my-3 min-h-[calc(100dvh-10.5rem)] overflow-x-clip md:overflow-hidden rounded-2xl bg-cream-100 shadow-raised-3d md:mx-4 md:my-6 md:min-h-[calc(100dvh-12rem)] md:rounded-3xl lg:min-h-[calc(100dvh-9rem)]">{children}</main>
 
       <footer className="mt-20 hidden bg-surface-3d-deep text-cream-200 shadow-[inset_0_1px_0_rgba(255,224,194,0.08)] lg:block">
         <div className="container-app grid gap-10 py-14 md:grid-cols-4">
@@ -209,7 +209,7 @@ export function Layout({ children }: { children: ReactNode }) {
         </div>
       </footer>
 
-      <div className="fixed bottom-0 left-0 right-0 z-40 border-t border-brand-900/10 bg-gradient-to-t from-cream-100 to-white px-2 py-2 shadow-[0_-8px_24px_-12px_rgba(58,20,5,0.25)] backdrop-blur-lg lg:hidden">
+      <div className="fixed bottom-0 left-0 right-0 z-40 border-t border-brand-900/10 bg-gradient-to-t from-cream-100 to-white px-2 py-2 shadow-[0_-8px_24px_-12px_rgba(58,20,5,0.25)] lg:hidden">
         <div className="grid grid-cols-5">
           {[
             { to: '/', label: 'Home', Icon: Home },

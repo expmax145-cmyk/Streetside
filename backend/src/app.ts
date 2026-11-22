@@ -33,7 +33,15 @@ export function createApp(): Express {
     app.set('trust proxy', trustProxy);
   }
 
-  app.use(helmet());
+  app.use(helmet({
+    contentSecurityPolicy: {
+      directives: {
+        ...helmet.contentSecurityPolicy.getDefaultDirectives(),
+        // Reviewer avatars and some vendor photos are hosted on other https sites.
+        'img-src': ["'self'", 'data:', 'https:'],
+      },
+    },
+  }));
 
   const allowedOrigins = new Set([
     env.clientUrl,

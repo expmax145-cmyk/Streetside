@@ -188,7 +188,7 @@ export default {
       },
       animation: {
         'fade-in': 'fade-in 0.28s ease-out',
-        'fade-in-up': 'fade-in-up 0.4s ease-out both',
+        'fade-in-up': 'fade-in-up 0.25s ease-out both',
         'slide-in-right': 'slide-in-right 0.28s ease-out',
         'scale-in': 'scale-in 0.2s ease-out',
         'heart-pop': 'heart-pop 0.35s ease-out',
