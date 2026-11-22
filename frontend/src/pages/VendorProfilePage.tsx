@@ -242,7 +242,7 @@ export function VendorProfilePage() {
                 const VegIcon = vegIcon[item.veg];
                 return (
                   <div key={item.id} className="card flex gap-3 p-3 transition-shadow hover:shadow-card-hover sm:gap-4 sm:p-4">
-                    <img src={item.image} alt={item.name} loading="lazy" className="h-20 w-20 shrink-0 rounded-xl object-cover ring-1 ring-charcoal-100 sm:h-24 sm:w-24" />
+                    <img src={item.image} alt={item.name} className="h-20 w-20 shrink-0 rounded-xl object-cover ring-1 ring-charcoal-100 sm:h-24 sm:w-24" />
                     <div className="min-w-0 flex-1">
                       <div className="flex items-start justify-between gap-2">
                         <div className="flex min-w-0 items-start gap-2">

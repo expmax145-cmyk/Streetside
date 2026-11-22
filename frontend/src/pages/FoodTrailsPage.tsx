@@ -24,7 +24,7 @@ export function FoodTrailsPage() {
         {foodTrails.map((trail, i) => (
           <Link key={trail.id} to={`/trails/${trail.id}`} className="card card-hover group overflow-hidden animate-fade-in-up" style={{ animationDelay: `${i * 80}ms` }}>
             <div className="relative aspect-video overflow-hidden bg-charcoal-100">
-              <img src={trail.image} alt={trail.name} loading="lazy" className="img-cover transition-transform duration-500 group-hover:scale-[1.04]" />
+              <img src={trail.image} alt={trail.name} className="img-cover transition-transform duration-500 group-hover:scale-[1.04]" />
               <div className="absolute inset-0 bg-gradient-to-t from-charcoal-900/75 to-transparent" />
               <div className="absolute bottom-3 left-3 right-3 flex items-center justify-between">
                 <span className="badge bg-white text-charcoal-800 shadow-soft">{trail.stops.length} stops</span>

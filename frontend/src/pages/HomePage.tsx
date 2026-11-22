@@ -146,7 +146,7 @@ export function HomePage() {
               className="group relative aspect-square w-32 shrink-0 snap-start overflow-hidden rounded-2xl border border-charcoal-200/60 shadow-card transition-all duration-300 hover:-translate-y-0.5 hover:shadow-card-hover animate-fade-in-up sm:w-36"
               style={{ animationDelay: `${i * 50}ms` }}
             >
-              <img src={cat.image} alt={cat.name} loading="lazy" className="img-cover transition-transform duration-500 group-hover:scale-110" />
+              <img src={cat.image} alt={cat.name} className="img-cover transition-transform duration-500 group-hover:scale-110" />
               <div className={`absolute inset-0 bg-gradient-to-t ${cat.color} opacity-50 mix-blend-multiply`} />
               <div className="absolute inset-0 bg-gradient-to-t from-charcoal-900/85 via-charcoal-900/25 to-transparent" />
               <div className="absolute bottom-0 left-0 right-0 p-3 text-center">
@@ -252,7 +252,6 @@ export function HomePage() {
                   <img
                     src={trail.image}
                     alt={trail.name}
-                    loading="lazy"
                     className="img-cover transition-transform duration-500 group-hover:scale-[1.04]"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-charcoal-900/70 to-transparent" />

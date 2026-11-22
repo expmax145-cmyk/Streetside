@@ -42,7 +42,7 @@ export function VendorCard({
       style={{ animationDelay: `${Math.min(index * 60, 400)}ms` }}
     >
       <div className="relative aspect-[16/10] overflow-hidden sm:aspect-[4/3] bg-charcoal-100">
-        <img src={imageOverride ?? vendor.image} alt={vendor.name} loading="lazy" className="img-cover transition-transform duration-500 group-hover:scale-[1.04]" />
+        <img src={imageOverride ?? vendor.image} alt={vendor.name} className="img-cover transition-transform duration-500 group-hover:scale-[1.04]" />
         <div className="absolute inset-0 bg-gradient-to-t from-charcoal-900/75 via-charcoal-900/15 to-transparent" />
         <button
           onClick={(e) => {

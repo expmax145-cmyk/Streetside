@@ -66,16 +66,34 @@ async function loadAllVendorPages(): Promise<Vendor[]> {
   return all;
 }
 
+// The last successful load is kept in the browser so a return visit shows
+// the whole site instantly while fresh data is fetched in the background.
+const CACHE_KEY = 'streetside:data:v1';
+interface CachedData { vendors: Vendor[]; offers: Offer[]; events: EventItem[]; foodTrails: FoodTrail[] }
+
+function readCache(): CachedData | null {
+  try {
+    const raw = localStorage.getItem(CACHE_KEY);
+    if (!raw) return null;
+    const data = JSON.parse(raw) as CachedData;
+    return Array.isArray(data.vendors) && data.vendors.length > 0 ? data : null;
+  } catch {
+    return null;
+  }
+}
+
 export function DataProvider({ children }: { children: ReactNode }) {
-  const [vendors, setVendors] = useState<Vendor[]>([]);
-  const [offers, setOffers] = useState<Offer[]>([]);
-  const [events, setEvents] = useState<EventItem[]>([]);
-  const [foodTrails, setFoodTrails] = useState<FoodTrail[]>([]);
-  const [remoteLoading, setRemoteLoading] = useState(true);
+  const [cached] = useState(readCache);
+  const [vendors, setVendors] = useState<Vendor[]>(cached?.vendors ?? []);
+  const [offers, setOffers] = useState<Offer[]>(cached?.offers ?? []);
+  const [events, setEvents] = useState<EventItem[]>(cached?.events ?? []);
+  const [foodTrails, setFoodTrails] = useState<FoodTrail[]>(cached?.foodTrails ?? []);
+  const [remoteLoading, setRemoteLoading] = useState(!cached);
   const [remoteError, setRemoteError] = useState<Error | null>(null);
 
   const loadRemoteData = useCallback(async () => {
-    setRemoteLoading(true);
+    // Don't blank the page with a spinner if there is already data on screen.
+    setRemoteLoading((current) => current && !cached);
     setRemoteError(null);
     try {
       // Vendors are the core of nearly every page, so a failure there is
@@ -92,12 +110,15 @@ export function DataProvider({ children }: { children: ReactNode }) {
       setOffers(offerList);
       setEvents(eventList);
       setFoodTrails(trailList);
+      try {
+        localStorage.setItem(CACHE_KEY, JSON.stringify({ vendors: vendorList, offers: offerList, events: eventList, foodTrails: trailList }));
+      } catch { /* storage full or blocked: the cache is optional */ }
     } catch (err) {
       setRemoteError(err instanceof Error ? err : new Error('Failed to load StreetSide data'));
     } finally {
       setRemoteLoading(false);
     }
-  }, []);
+  }, [cached]);
 
   useEffect(() => {
     loadRemoteData();

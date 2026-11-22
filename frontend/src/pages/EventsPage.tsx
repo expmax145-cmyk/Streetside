@@ -22,7 +22,7 @@ export function EventsPage() {
             {featured.map((event, i) => (
               <Link key={event.id} to={`/events/${event.id}`} className="card card-hover group overflow-hidden animate-fade-in-up" style={{ animationDelay: `${i * 100}ms` }}>
                 <div className="relative aspect-[16/9] overflow-hidden bg-charcoal-100">
-                  <img src={event.image} alt={event.name} loading="lazy" className="img-cover transition-transform duration-500 group-hover:scale-[1.04]" />
+                  <img src={event.image} alt={event.name} className="img-cover transition-transform duration-500 group-hover:scale-[1.04]" />
                   <div className="absolute inset-0 bg-gradient-to-t from-charcoal-900/75 to-transparent" />
                   <span className="absolute top-3 left-3 badge bg-btn-3d text-white shadow-raised-3d"><Flame size={11} /> Featured</span>
                 </div>
@@ -49,7 +49,7 @@ export function EventsPage() {
             {upcoming.map((event, i) => (
               <Link key={event.id} to={`/events/${event.id}`} className="card card-hover group overflow-hidden animate-fade-in-up" style={{ animationDelay: `${i * 80}ms` }}>
                 <div className="relative aspect-video overflow-hidden">
-                  <img src={event.image} alt={event.name} loading="lazy" className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105" />
+                  <img src={event.image} alt={event.name} className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105" />
                   <div className="absolute inset-0 bg-gradient-to-t from-charcoal-900/60 to-transparent" />
                 </div>
                 <div className="p-4">

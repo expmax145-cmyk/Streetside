@@ -57,7 +57,7 @@ export function EventDetailPage() {
             {eventVendors.map((v) => (
               <Link key={v.id} to={`/vendor/${v.id}`} className="card card-hover group overflow-hidden">
                 <div className="aspect-square overflow-hidden">
-                  <img src={v.image} alt={v.name} loading="lazy" className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105" />
+                  <img src={v.image} alt={v.name} className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105" />
                 </div>
                 <div className="p-3">
                   <h4 className="truncate text-sm font-bold text-charcoal-900">{v.name}</h4>

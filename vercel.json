@@ -2,6 +2,7 @@
   "installCommand": "npm install --prefix frontend && npm install --prefix backend",
   "buildCommand": "npm run build --prefix backend && npm run build --prefix frontend",
   "outputDirectory": "frontend/dist",
+  "regions": ["bom1"],
   "functions": {
     "api/index.js": { "includeFiles": "backend/dist/**", "maxDuration": 30 }
   },

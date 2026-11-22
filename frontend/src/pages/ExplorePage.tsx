@@ -1,18 +1,27 @@
 import { useMemo, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { SlidersHorizontal, X, Clock, MapPin, Loader2 } from 'lucide-react';
+import { SlidersHorizontal, X, Clock, MapPin } from 'lucide-react';
 import { VendorCard, VendorCardSkeleton } from '@/components/VendorCard';
 import { CategoryPills } from '@/components/CategoryPills';
 import { Modal } from '@/components/Modal';
 import { useUserLocation } from '@/hooks/useUserLocation';
-import { useInfiniteVendors, type VendorFilters } from '@/hooks/useInfiniteVendors';
+import { useData } from '@/contexts/DataContext';
+import { vendorIsOpenNow } from '@/lib/format';
 import type { Vendor } from '@/types';
 
 type SortBy = 'popularity' | 'rating' | 'distance' | 'price-low' | 'price-high';
 
-// this page now paginates and filters server-side via
-// useInfiniteVendors (see that hook's docstring for why SearchPage keeps
-// its own, separately-sourced full-list fuzzy search instead).
+// Great-circle distance in km between two lat/lng points.
+function distanceKm(a: { lat: number; lng: number }, b: { lat: number; lng: number }): number {
+  const rad = (d: number) => (d * Math.PI) / 180;
+  const h = Math.sin(rad(b.lat - a.lat) / 2) ** 2
+    + Math.cos(rad(a.lat)) * Math.cos(rad(b.lat)) * Math.sin(rad(b.lng - a.lng) / 2) ** 2;
+  return 2 * 6371 * Math.asin(Math.sqrt(h));
+}
+
+// Every vendor is already loaded once for the whole app (DataContext), so
+// Explore just filters and sorts that full list in the browser. Nothing is
+// fetched as you scroll and every vendor is on the page straight away.
 export function ExplorePage() {
   const [searchParams, setSearchParams] = useSearchParams();
   const [activeCat, setActiveCat] = useState(searchParams.get('cat') || 'All');
@@ -25,20 +34,27 @@ export function ExplorePage() {
   const { location: userLocation, status: locationStatus, requestLocation } = useUserLocation();
   const hasLocation = locationStatus === 'granted' && userLocation !== null;
 
-  const filters: VendorFilters = useMemo(() => ({
-    category: activeCat,
-    veg: vegOnly,
-    openNow: openOnly,
-    sort: sortBy,
-    userLat: hasLocation ? userLocation!.lat : undefined,
-    userLng: hasLocation ? userLocation!.lng : undefined,
-    // Only sent once we actually know the distance — see the note on
-    // 's ExplorePage history: filtering by an unknown distance
-    // must never silently exclude every vendor.
-    maxDistanceKm: hasLocation && maxDistance < 10 ? maxDistance : undefined,
-  }), [activeCat, vegOnly, openOnly, sortBy, hasLocation, userLocation, maxDistance]);
+  const { vendors: allVendors, remoteLoading: loading, remoteError: error, reloadVendors: retry } = useData();
 
-  const { vendors, total, loading, loadingMore, hasMore, error, sentinelRef, retry } = useInfiniteVendors(filters);
+  const vendors = useMemo(() => {
+    let list: Vendor[] = allVendors;
+    if (activeCat !== 'All') list = list.filter((v) => v.categories.includes(activeCat as Vendor['categories'][number]));
+    if (vegOnly) list = list.filter((v) => v.veg === 'pure-veg');
+    if (openOnly) list = list.filter((v) => vendorIsOpenNow(v));
+    if (hasLocation) {
+      const origin = userLocation!;
+      list = list.map((v) => ({ ...v, distance: distanceKm(origin, v.location) }));
+      if (maxDistance < 10) list = list.filter((v) => (v.distance ?? Infinity) <= maxDistance);
+    }
+    const sorted = [...list];
+    if (sortBy === 'rating') sorted.sort((a, b) => b.rating - a.rating);
+    else if (sortBy === 'distance' && hasLocation) sorted.sort((a, b) => (a.distance ?? Infinity) - (b.distance ?? Infinity));
+    else if (sortBy === 'price-low') sorted.sort((a, b) => a.priceRange[0] - b.priceRange[0]);
+    else if (sortBy === 'price-high') sorted.sort((a, b) => b.priceRange[1] - a.priceRange[1]);
+    else sorted.sort((a, b) => (b.popularity ?? 0) - (a.popularity ?? 0));
+    return sorted;
+  }, [allVendors, activeCat, vegOnly, openOnly, sortBy, hasLocation, userLocation, maxDistance]);
+  const total = vendors.length;
 
   const handleCatSelect = (cat: string) => {
     setActiveCat(cat);
@@ -73,7 +89,7 @@ export function ExplorePage() {
       </div>
 
       <div className="mb-6 space-y-4">
-        {error && (
+        {error && !loading && (
           <div className="mb-2 flex items-center justify-between gap-3 rounded-xl border border-danger-100 bg-danger-50 p-2.5 text-sm text-danger-700">
             <div>Unable to load vendors.</div>
             <button onClick={retry} className="btn-sm btn-primary">Retry</button>
@@ -114,12 +130,6 @@ export function ExplorePage() {
           <p className="mb-4 text-sm text-charcoal-500">{total} {total === 1 ? 'vendor' : 'vendors'} found</p>
           <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
             {vendors.map((v, i) => <VendorCard key={v.id} vendor={v} index={i} imageOverride={categoryImage(v)} />)}
-          </div>
-          {/* sentinel div — scrolling this into view loads
-              the next page automatically (see useInfiniteVendors). */}
-          <div ref={sentinelRef} className="mt-6 flex items-center justify-center py-4">
-            {loadingMore && <span className="flex items-center gap-2 text-sm text-charcoal-500"><Loader2 size={16} className="animate-spin" /> Loading more…</span>}
-            {!hasMore && vendors.length > 0 && <span className="text-sm text-charcoal-400">You've reached the end</span>}
           </div>
         </>
       )}

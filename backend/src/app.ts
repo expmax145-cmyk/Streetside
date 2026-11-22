@@ -67,6 +67,16 @@ export function createApp(): Express {
   app.use(express.json({ limit: '1mb' }));
   app.use(express.urlencoded({ extended: true, limit: '1mb' }));
   app.use(cookieParser());
+
+  // Public, read-only listings are the same for everyone, so let Vercel's edge
+  // cache serve them instantly (refreshing in the background). Requests that
+  // carry a login token are never marked cacheable.
+  app.use('/api', (req, res, next) => {
+    if (req.method === 'GET' && !req.headers.authorization && /^\/(vendors|events|offers|food-trails)(\/|$)/.test(req.path)) {
+      res.set('Cache-Control', 'public, s-maxage=60, stale-while-revalidate=300');
+    }
+    next();
+  });
   app.use(mongoSanitize());
 
   // global CSRF check for all mutating requests, now that the
